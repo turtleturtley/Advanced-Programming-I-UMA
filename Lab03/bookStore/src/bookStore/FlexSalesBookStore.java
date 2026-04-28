@@ -32,4 +32,9 @@ public class FlexSalesBookStore extends BookStore{
 		
 		super.addBook(bookFinal);
 	}
+	
+	@Override
+	public String toString() {
+		return discount.toString() + "\n" + super.toString();
+	}
 }
