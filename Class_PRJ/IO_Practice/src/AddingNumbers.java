@@ -1,32 +1,75 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+/**
+ * Objective: Read space-separated numbers from a text file (./src/Numbers.txt),
+ * calculate their total sum, and display the result on the screen.
+ */
+
+import java.io.*;
+import java.nio.file.*;
 import java.util.Scanner;
 
-public class AddingNumbers {
+/* * [Method 1] Calculate the sum using Scanner
+ */
+//public class AddingNumbers {
+//	public static void main(String[] args) throws IOException {
+//		Scanner sc = new Scanner(new File("./src/Numbers.txt"));
+//		
+//		int sum = 0;
+//		
+//		while (sc.hasNextLine()) {
+//			String line = sc.nextLine();
+//			String[] numbers = line.split(" ");
+//			
+//			for(int i = 0; i < numbers.length; i++) {
+//				sum += Integer.parseInt(numbers[i]);
+//			}
+//		}
+//		
+//		System.out.println("sum : " + sum);
+//		
+//		sc.close();
+//	}
+//}
 
+/* * [Method 2] Calculate the sum using BufferedReader
+ */
+public class AddingNumbers {
 	public static void main(String[] args) {
-		try (Scanner sc = new Scanner (new File("./src/Numbers.txt"))){
+		
+		int sum = 0;
+		
+		try (BufferedReader br = Files.newBufferedReader(Path.of("./src/Numbers.txt"))) {
+			String line = br.readLine();
+		
+			while(line!= null) {
+				String[] numbers = line.split("[ ]+");
 			
-			int sum = 0;
-			while(sc.hasNext()) {
-				int newInt = Integer.parseInt(sc.next());
-				sum += newInt;
+				for(int i = 0; i < numbers.length; i++) {
+					sum += Integer.parseInt(numbers[i]);
+				}
+				line = br.readLine();
 			}
-			
-		/*while(sc.hasNextLine())을 썼을 때에 대한 것도 설명해주셨음
-			{
-				string line = sc.nextLine();
-				String [] numbers = line.split("[ ]+")
-				for (String newInt : numbers)
-				...
-			}
-		*/
-			sc.close(); //외부파일 반
-			System.out.println("sum :" + sum);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		}
+		catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("ERROR: the file name must be given");
+		}
+		catch (IOException e) {
+			System.out.println("ERROR: the file cannot be read");
+		}
+		System.out.println("sum : " + sum);
+	
+
+
+/* *[Method 3] Save the result using PrintWriter
+ */
+		try (PrintWriter pw = new PrintWriter(new File("Result.txt"))) {
+	        pw.println("sum : " + sum);
+	    } catch (IOException e) {
+	        System.out.println("ERROR: Could not save the file.");
+	    }
 	}
 }
 
-// try{} : 에러가 발생할 수 있는 코드, catch{} : 에러가 발생할 때 실핼할 코드 
+
+
+
+
